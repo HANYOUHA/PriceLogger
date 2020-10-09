@@ -21,35 +21,31 @@ import pandas as pd
 import numpy as np
 import time
 
-
-# In[45]:
-
-
 chrome_options = Options()
 chrome_options.add_experimental_option("debuggerAddress", "localhost:9222")
 chrome_driver = "/home/kimjadong2020/Documents/chromedriver"
 driver = webdriver.Chrome(chrome_driver, options=chrome_options)
 
-
-# In[43]:
-
+def getURL(url):
+    driver.get(url)
+    driver.implicitly_wait(2)
+    driver.refresh()
 
 def refillGold():
-    url = "https://rivalregions.com/#parliament/offer"
-    driver.get(url)
-    driver.refresh()
-    time.sleep(3)
+    getURL("https://rivalregions.com/#parliament/offer")
+    driver.implicitly_wait(4)
+    # time.sleep(4)
+    print ("explore state gold")
     driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
-    time.sleep(3)
+    driver.implicitly_wait(4)
+    # time.sleep(3)
     driver.find_element_by_link_text("Resources exploration: state").click()
     driver.find_element_by_id("offer_do").click()
+    time.sleep(1)
     
 def goldRefiiler(): # 금 채우기 검사 및 실행
-    url = "https://rivalregions.com/#listed/stateresources/3330"
-    driver.get(url)
-    driver.refresh()
+    getURL("https://rivalregions.com/#listed/stateresources/3330")
     time.sleep(3)
-
     tempList = []
     gold_reserve = driver.find_elements_by_class_name("list_level")
     for element in gold_reserve:
@@ -62,7 +58,7 @@ def goldRefiiler(): # 금 채우기 검사 및 실행
        columns=["Explored", "Maximum", "Deep_exploration", "Limit_left"]
     )
 
-    str_expr = "Limit_left > 0 and Explored < Maximum - 50"
+    str_expr = "Limit_left > 0 and Explored < Maximum - 80"
     df_q = df_gold.query(str_expr) 
 
     if df_q.empty:
@@ -72,7 +68,6 @@ def goldRefiiler(): # 금 채우기 검사 및 실행
         print("do refill")
         refillGold()
         return True
-
 
 def goldRefillPresident():
     if (goldRefiiler()):
@@ -105,10 +100,6 @@ def budgetCheck():
     ).T
     return df
 
-
-# In[46]:
-
-
 def priceLoging (numList):
     priceList = []
     now = str( datetime.datetime.now() )
@@ -117,24 +108,15 @@ def priceLoging (numList):
     for num in numList:
         s_xpath = "//div[@url='"+ str(num) +"']"
         driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
-        time.sleep(4)
+        time.sleep(3)
         element_price = driver.find_element_by_xpath("/html/body/div[6]/div[1]/div[1]/div[2]/div[1]/div[3]/span/span")
         time.sleep(2)
         price = int(element_price.text.split(" ")[0].replace(".",""))
         priceList.append(price)
         
-        
     with open("price_list.csv", "a", newline='') as f:
         writer = csv.writer(f)
         writer.writerow( priceList )
-
-def getURL(url):
-    driver.get(url)
-    driver.implicitly_wait(100)
-    driver.refresh()
-
-getURL("https://rivalregions.com/#overview")
-itemList = [3, 4, 11, 15, 26] # 석유 광물 우라늄 다이아 라이벌륨
 
 def train():
     # war train
@@ -157,14 +139,18 @@ def work():
 
 def controller():   
     # price logging
+    driver.implicitly_wait(3)
     getURL("https://rivalregions.com/#storage")
     priceLoging(itemList)    
     work()    
 
+itemList = [3, 4, 11, 15, 26] # 석유 광물 우라늄 다이아 라이벌륨
+driver.implicitly_wait(2)
+getURL("https://rivalregions.com/#overview")
 
 # control plane
 for i in range(24):
     goldRefillPresident()
     for j in range(5):
         controller()
-        time.sleep(590)
+        time.sleep(580)
