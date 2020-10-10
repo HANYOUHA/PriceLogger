@@ -36,7 +36,7 @@ def refillGold():
     driver.implicitly_wait(1)
     driver.find_element_by_id("offer_do").click()
     # time.sleep(1)
-    
+
 def goldRefiiler(): # 금 채우기 검사 및 실행
     getURL("https://rivalregions.com/#listed/stateresources/3330")
     tempList = []
@@ -94,25 +94,26 @@ def budgetCheck():
         itemList.append(item)
 
     df = pd.DataFrame(
-        np.array(itemList).reshape(1, 6), 
+        np.array(itemList).reshape(1, 6),
         columns=["cash", "gold", "oil", "ore", "uranium", "diamond"]
     ).T
     return df
 
 def priceLoging (numList):
+    getURL("https://rivalregions.com/#storage")
     priceList = []
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     priceList.append( str(now) )
-    
+
     for num in numList:
-        time.sleep(2)
-        s_xpath = "//div[@url='"+ str(num) +"']"
+        time.sleep(1)
+        s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
         driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
         time.sleep(3)
         element_price = driver.find_element_by_xpath("/html/body/div[6]/div[1]/div[1]/div[2]/div[1]/div[3]/span/span")
         price = int(element_price.text.split(" ")[0].replace(".",""))
         priceList.append(price)
-        
+
     with open("price_list.csv", "a", newline='') as f:
         writer = csv.writer(f)
         writer.writerow( priceList )
@@ -123,27 +124,24 @@ def train():
     driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
     driver.find_element_by_id("war_my_alpha").click()
     driver.refresh()
-    driver.find_element_by_id("header_my_fill_bar").click()    
+    driver.find_element_by_id("header_my_fill_bar").click()
     driver.find_element_by_id("war_my_alpha").click()
-    
-def work():    
+
+def work():
     getURL("https://rivalregions.com/#work")
     xpath = "//*[@id='content']/div[6]/div[2]/div[2]/div[3]/div[1]/span/span[1]"
     driver.find_element_by_xpath(xpath).click()
-    '''
     driver.find_element_by_id("header_my_fill_bar").click()
     driver.refresh()
-    driver.find_element_by_xpath(xpath).click()
-    '''
-
-def controller():   
-    # price logging
     driver.implicitly_wait(3)
-    getURL("https://rivalregions.com/#storage")
-    priceLoging(itemList)    
-    work()    
+    driver.find_element_by_xpath(xpath).click()
 
-itemList = [3, 4, 11, 15, 26] # 석유 광물 우라늄 다이아 라이벌륨
+def controller():
+    # price logging
+    priceLoging(itemList)
+    work()
+
+itemList = [3, 4, 5, 6, 9] # 석유 광물 우라늄 다이아 라이벌륨
 driver.implicitly_wait(2)
 getURL("https://rivalregions.com/#overview")
 
@@ -152,4 +150,4 @@ for i in range(24):
     goldRefillPresident()
     for j in range(6):
         controller()
-        time.sleep(570)
+        time.sleep(575)
