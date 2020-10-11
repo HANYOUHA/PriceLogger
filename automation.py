@@ -24,7 +24,7 @@ driver = webdriver.Chrome(chrome_driver, options=chrome_options)
 def getURL(url):
     driver.get(url)
     driver.refresh()
-    driver.implicitly_wait(3)
+    driver.implicitly_wait(5)
 
 def refillGold():
     getURL("https://rivalregions.com/#parliament/offer")
@@ -101,16 +101,20 @@ def budgetCheck():
 
 def priceLoging (numList):
     getURL("https://rivalregions.com/#storage")
+    driver.refresh()
     priceList = []
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     priceList.append( str(now) )
+    driver.implicitly_wait(5)
 
     for num in numList:
-        time.sleep(1)
         s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
+        time.sleep(3)
         driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
         time.sleep(3)
-        element_price = driver.find_element_by_xpath("/html/body/div[6]/div[1]/div[1]/div[2]/div[1]/div[3]/span/span")
+        xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
+        element_price = driver.find_element_by_xpath(xpath)
+        # element_price = driver.find_element_by_xpath("/html/body/div[6]/div[1]/div[1]/div[2]/div[1]/div[3]/span/span")
         price = int(element_price.text.split(" ")[0].replace(".",""))
         priceList.append(price)
 
@@ -129,12 +133,17 @@ def train():
 
 def work():
     getURL("https://rivalregions.com/#work")
-    xpath = "//*[@id='content']/div[6]/div[2]/div[2]/div[3]/div[1]/span/span[1]"
-    driver.find_element_by_xpath(xpath).click()
+    selector = "#content > div:nth-child(7) > div.work_w_5.work_square > div.tc.float_left.mini.work_exp_2 > div:nth-child(3) > div.work_factory_button.button_blue"
+    # xpath = "//*[@id='content']/div[6]/div[2]/div[2]/div[3]/div[1]/span/span[1]"
+    # driver.find_element_by_xpath(xpath).click()
+    driver.find_element_by_css_selector( selector).click()
+    driver.implicitly_wait(1)
     driver.find_element_by_id("header_my_fill_bar").click()
     driver.refresh()
     driver.implicitly_wait(3)
-    driver.find_element_by_xpath(xpath).click()
+    time.sleep(1)
+    # driver.find_element_by_xpath(xpath).click()
+    driver.find_element_by_css_selector( selector).click()
 
 def controller():
     # price logging
