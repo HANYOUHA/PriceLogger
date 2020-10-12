@@ -35,7 +35,6 @@ def refillGold():
     driver.find_element_by_link_text("Resources exploration: state").click()
     driver.implicitly_wait(1)
     driver.find_element_by_id("offer_do").click()
-    # time.sleep(1)
 
 def goldRefiiler(): # 금 채우기 검사 및 실행
     getURL("https://rivalregions.com/#listed/stateresources/3330")
@@ -86,7 +85,8 @@ def budgetCheck():
     itemList = []
 
     budgetList = driver.find_element_by_css_selector(
-        "#header_slide_inner > div.minwidth > div.slide_profile_photo > div.imp").find_elements_by_class_name("tip")
+            "#header_slide_inner > div.minwidth > div.slide_profile_photo > div.imp"
+        ).find_elements_by_class_name("tip")
 
     for i in budgetList:
         item = int(i.text.split(" ")[0].replace(".",""))
@@ -103,10 +103,10 @@ def priceLoging (numList):
     priceList = []
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     priceList.append( str(now) )
-    driver.implicitly_wait(5)
     time.sleep(1)
 
     for num in numList:
+        time.sleep(2)
         s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
         driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
         xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
@@ -116,8 +116,9 @@ def priceLoging (numList):
         except:
             print("xpath is missing")
             getURL("https://rivalregions.com/#storage")
+            time.sleep(2)
             driver.find_element_by_xpath(f"//*[@id='content']/div[{num}]/div[3]").click()
-            time.sleep(8)
+            time.sleep(5)
             xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
             element_price = driver.find_element_by_xpath(xpath)
         price = int(element_price.text.split(" ")[0].replace(".",""))
@@ -130,11 +131,18 @@ def priceLoging (numList):
 def train():
     # war train
     getURL("https://rivalregions.com/#war")
-    driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
-    driver.find_element_by_id("war_my_alpha").click()
-    driver.refresh()
-    driver.find_element_by_id("header_my_fill_bar").click()
-    driver.find_element_by_id("war_my_alpha").click()
+    try:
+        driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
+        driver.find_element_by_id("war_my_alpha").click()
+        '''
+        driver.refresh()
+        driver.implicitly_wait(3)
+        driver.find_element_by_id("header_my_fill_bar").click()
+        time.sleep(1)
+        driver.find_element_by_id("war_my_alpha").click()
+        '''
+    except:
+        print("train error")
 
 def work():
     getURL("https://rivalregions.com/#work")
@@ -145,17 +153,16 @@ def work():
         driver.find_element_by_id("header_my_fill_bar").click()
     except:
         print("Cannot refill energy")
-    driver.implicitly_wait(3)
+    time.sleep(2)
     driver.refresh()
     driver.implicitly_wait(3)
-    time.sleep(1)
-    # driver.find_element_by_xpath(xpath).click()
+    time.sleep(2)
     driver.find_element_by_css_selector( selector).click()
 
 def controller():
+    work()
     # price logging
     priceLoging(itemList)
-    work()
 
 itemList = [3, 4, 5, 6, 9] # 석유 광물 우라늄 다이아 라이벌륨
 driver.implicitly_wait(2)
@@ -163,6 +170,7 @@ getURL("https://rivalregions.com/#overview")
 
 # control plane
 for i in range(24):
+    train()
     goldRefillPresident()
     time.sleep(1)
     for j in range(6):
