@@ -28,12 +28,12 @@ def getURL(url):
 
 def refillGold():
     getURL("https://rivalregions.com/#parliament/offer")
-    driver.implicitly_wait(4)
     print ("explore state gold")
+    driver.implicitly_wait(10)
     driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
     driver.implicitly_wait(4)
     driver.find_element_by_link_text("Resources exploration: state").click()
-    driver.implicitly_wait(1)
+    driver.implicitly_wait(2)
     driver.find_element_by_id("offer_do").click()
 
 def goldRefiiler(): # 금 채우기 검사 및 실행
@@ -103,22 +103,24 @@ def priceLoging (numList):
     priceList = []
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     priceList.append( str(now) )
-    time.sleep(1)
+    time.sleep(2)
 
     for num in numList:
         time.sleep(2)
         s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
-        driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
-        xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
-        time.sleep(4)
         try:
+            driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
+            xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
+            time.sleep(5)
             element_price = driver.find_element_by_xpath(xpath)
         except:
-            print("xpath is missing")
+            print(f"resouces {num}")
+            print ("Unexpected error:", sys.exc_info()[0])
             getURL("https://rivalregions.com/#storage")
+            driver.find_element_by_xpath("//*[@id='sa_add2']/div[2]/a[2]/div").click()
             time.sleep(2)
             driver.find_element_by_xpath(f"//*[@id='content']/div[{num}]/div[3]").click()
-            time.sleep(5)
+            time.sleep(8)
             xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
             element_price = driver.find_element_by_xpath(xpath)
         price = int(element_price.text.split(" ")[0].replace(".",""))
@@ -131,6 +133,7 @@ def priceLoging (numList):
 def train():
     # war train
     getURL("https://rivalregions.com/#war")
+    time.sleep(1)
     try:
         driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
         driver.find_element_by_id("war_my_alpha").click()
@@ -147,16 +150,21 @@ def train():
 def work():
     getURL("https://rivalregions.com/#work")
     selector = "#content > div:nth-child(7) > div.work_w_5.work_square > div.tc.float_left.mini.work_exp_2 > div:nth-child(3) > div.work_factory_button.button_blue"
-    driver.find_element_by_css_selector( selector).click()
+    time.sleep(1)
+    try:
+        driver.find_element_by_css_selector( selector).click()
+    except:
+        print ("can't find factory button")
+        return -1
+
     driver.implicitly_wait(1)
     try:
         driver.find_element_by_id("header_my_fill_bar").click()
     except:
         print("Cannot refill energy")
-    time.sleep(2)
     driver.refresh()
-    driver.implicitly_wait(3)
     time.sleep(2)
+    selector = "#content > div:nth-child(7) > div.work_w_5.work_square > div.tc.float_left.mini.work_exp_2 > div:nth-child(3) > div.work_factory_button.button_blue"
     driver.find_element_by_css_selector( selector).click()
 
 def controller():
@@ -165,8 +173,8 @@ def controller():
     priceLoging(itemList)
 
 itemList = [3, 4, 5, 6, 9] # 석유 광물 우라늄 다이아 라이벌륨
-driver.implicitly_wait(2)
 getURL("https://rivalregions.com/#overview")
+driver.implicitly_wait(3)
 
 # control plane
 for i in range(24):
