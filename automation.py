@@ -28,14 +28,14 @@ def getURL(url):
 
 def refillGold():
     getURL("https://rivalregions.com/#parliament/offer")
-    driver.implicitly_wait(7)
     print ("explore state gold")
+    driver.implicitly_wait(7)
     try:
         driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
     except:
         print ("Unexpected error:", sys.exc_info()[0])
         getURL("https://rivalregions.com/#parliament/offer")
-        time.sleep(4)
+        time.sleep(5)
         driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
 
     driver.implicitly_wait(4)
@@ -110,6 +110,7 @@ def priceLoging (numList):
     priceList = []
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     priceList.append( str(now) )
+    time.sleep(3)
 
     for num in numList:
         time.sleep(2)
@@ -117,17 +118,24 @@ def priceLoging (numList):
         driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
         xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
         time.sleep(3)
+        price = 0
         try:
             element_price = driver.find_element_by_xpath(xpath)
+            price = int(element_price.text.split(" ")[0].replace(".",""))
         except:
-            print("xpath is missing")
+            print(f"xpath is missing num : {num}")
             getURL("https://rivalregions.com/#storage")
+            time.sleep(2)
             driver.find_element_by_xpath(f"//*[@id='content']/div[{num}]/div[3]").click()
             time.sleep(8)
             xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
             element_price = driver.find_element_by_xpath(xpath)
-        price = int(element_price.text.split(" ")[0].replace(".",""))
-        priceList.append(price)
+            price = int(element_price.text.split(" ")[0].replace(".",""))
+        if (price != 0):
+            priceList.append(price)
+        else:
+            print ("price error")
+            return -1
 
     with open("price_list.csv", "a", newline='') as f:
         writer = csv.writer(f)
@@ -153,19 +161,33 @@ def work():
     try:
         driver.find_element_by_css_selector( selector).click()
     except:
-        getURL("https://rivalregions.com/#work")
-        driver.find_element_by_css_selector( selector).click()
+        print("work error")
+        try:
+            getURL("https://rivalregions.com/#work")
+            time.sleep(5)
+            driver.find_element_by_css_selector( selector).click()
+        except:
+            print("work error2")
+            getURL("https://rivalregions.com/#work")
+            driver.find_element_by_xpath("//*[@id='sa_add2']/div[2]/a[2]/div").click()
+            print("click capcha")
+            driver.implicitly_wait(5)
+            getURL("https://rivalregions.com/#work")
+            driver.find_element_by_css_selector( selector).click()
     driver.implicitly_wait(1)
     try:
         driver.find_element_by_id("header_my_fill_bar").click()
     except:
         print("Cannot refill energy")
-    driver.implicitly_wait(3)
+    time.sleep(2)
     driver.refresh()
-    driver.implicitly_wait(3)
-    time.sleep(1)
-    # driver.find_element_by_xpath(xpath).click()
-    driver.find_element_by_css_selector( selector).click()
+    driver.implicitly_wait(4)
+    time.sleep(2)
+    try:
+        driver.find_element_by_css_selector( selector).click()
+    except:
+        getURL("https://rivalregions.com/#work")
+        driver.find_element_by_css_selector( selector).click()
 
 def controller():
     work()
