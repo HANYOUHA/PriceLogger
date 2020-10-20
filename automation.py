@@ -113,7 +113,7 @@ def priceLoging (numList):
     time.sleep(3)
 
     for num in numList:
-        time.sleep(2)
+        time.sleep(3)
         s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
         driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
         xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
@@ -169,6 +169,7 @@ def work():
         except:
             print("work error2")
             getURL("https://rivalregions.com/#work")
+            time.sleep(5)
             driver.find_element_by_xpath("//*[@id='sa_add2']/div[2]/a[2]/div").click()
             print("click capcha")
             driver.implicitly_wait(5)
