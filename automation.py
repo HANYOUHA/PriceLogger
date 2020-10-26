@@ -29,7 +29,7 @@ def getURL(url):
 def refillGold():
     getURL("https://rivalregions.com/#parliament/offer")
     print ("explore state gold")
-    driver.implicitly_wait(7)
+    time.sleep(5)
     try:
         driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
     except:
@@ -110,16 +110,16 @@ def priceLoging (numList):
     priceList = []
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     priceList.append( str(now) )
-    time.sleep(3)
+    time.sleep(4)
 
     for num in numList:
-        time.sleep(3)
+        time.sleep(3.5)
         s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
-        driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
-        xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
-        time.sleep(3)
         price = 0
         try:
+            driver.find_element_by_xpath( s_xpath ).click() # 자원 클릭
+            xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
+            time.sleep(3)
             element_price = driver.find_element_by_xpath(xpath)
             price = int(element_price.text.split(" ")[0].replace(".",""))
         except:
@@ -169,7 +169,9 @@ def work():
         except:
             print("work error2")
             getURL("https://rivalregions.com/#work")
-            time.sleep(5)
+            time.sleep(3)
+            driver.refresh()
+            time.sleep(3)
             driver.find_element_by_xpath("//*[@id='sa_add2']/div[2]/a[2]/div").click()
             print("click capcha")
             driver.implicitly_wait(5)
@@ -180,10 +182,9 @@ def work():
         driver.find_element_by_id("header_my_fill_bar").click()
     except:
         print("Cannot refill energy")
-    time.sleep(2)
+    time.sleep(3)
     driver.refresh()
-    driver.implicitly_wait(4)
-    time.sleep(2)
+    time.sleep(3)
     try:
         driver.find_element_by_css_selector( selector).click()
     except:
@@ -205,4 +206,4 @@ for i in range(24):
     time.sleep(1)
     for j in range(6):
         controller()
-        time.sleep(573)
+        time.sleep(562)
