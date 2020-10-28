@@ -227,4 +227,4 @@ for i in range(24):
         getURL("https://rivalregions.com/#overview")
         educationUp()
         controller()
-        time.sleep(562)
+        # time.sleep(562)
