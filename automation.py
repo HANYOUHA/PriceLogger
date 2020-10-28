@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest, re, sys
@@ -22,20 +22,28 @@ chrome_driver = "/home/kimjadong2020/Documents/chromedriver"
 driver = webdriver.Chrome(chrome_driver, options=chrome_options)
 
 def getURL(url):
-    driver.get(url)
-    driver.refresh()
-    driver.implicitly_wait(6)
+    try:
+        driver.get(url)
+        driver.refresh()
+        driver.implicitly_wait(6)
+        return 0;
+    except:
+        print("Unexpected error", sys.exc_info()[0], "in getURL")
+        driver.refresh()
+        driver.implicitly_wait(6)
+        getURL(url);
+        return -1;
 
 def refillGold():
     getURL("https://rivalregions.com/#parliament/offer")
     print ("explore state gold")
-    time.sleep(5)
+    time.sleep(7)
     try:
         driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
     except:
-        print ("Unexpected error:", sys.exc_info()[0])
+        print ("Unexpected error:", sys.exc_info()[0], "in refillGold")
         getURL("https://rivalregions.com/#parliament/offer")
-        time.sleep(5)
+        time.sleep(7)
         driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
 
     driver.implicitly_wait(4)
@@ -46,6 +54,7 @@ def refillGold():
 
 def goldRefiiler(): # 금 채우기 검사 및 실행
     getURL("https://rivalregions.com/#listed/stateresources/3330")
+    time.sleep(1)
     tempList = []
     gold_reserve = driver.find_elements_by_class_name("list_level")
     for element in gold_reserve:
@@ -58,7 +67,7 @@ def goldRefiiler(): # 금 채우기 검사 및 실행
        columns=["Explored", "Maximum", "Deep_exploration", "Limit_left"]
     )
 
-    str_expr = "Limit_left > 0 and Explored < Maximum - 80"
+    str_expr = "Limit_left > 0 and Explored < Maximum - 100"
     df_q = df_gold.query(str_expr)
 
     if df_q.empty:
@@ -69,7 +78,7 @@ def goldRefiiler(): # 금 채우기 검사 및 실행
         try:
             refillGold()
         except:
-            print ("Unexpected error:", sys.exc_info()[0])
+            print ("Unexpected error:", sys.exc_info()[0], "in goldRefiller")
             return False
 
         return True
@@ -81,7 +90,8 @@ def goldRefillPresident():
             driver.implicitly_wait(1)
             getURL("https://rivalregions.com/#parliament")
             driver.implicitly_wait(2)
-            driver.find_element_by_xpath("//*[contains(text(), 'Resources exploration')]").click()
+            driver.find_element_by_xpath(
+                    "//*[contains(text(), 'Resources exploration')]" ).click()
             driver.implicitly_wait(2)
             driver.find_element_by_xpath("//*[@id='offer_show_v']/div[5]/div").click()
         except:
@@ -89,11 +99,10 @@ def goldRefillPresident():
 
 def budgetCheck():
     getURL("https://rivalregions.com/#state/details/3330")
-
     itemList = []
-
     budgetList = driver.find_element_by_css_selector(
-        "#header_slide_inner > div.minwidth > div.slide_profile_photo > div.imp").find_elements_by_class_name("tip")
+        "#header_slide_inner > div.minwidth > div.slide_profile_photo > div.imp"
+        ).find_elements_by_class_name("tip")
 
     for i in budgetList:
         item = int(i.text.split(" ")[0].replace(".",""))
@@ -127,7 +136,7 @@ def priceLoging (numList):
             getURL("https://rivalregions.com/#storage")
             time.sleep(2)
             driver.find_element_by_xpath(f"//*[@id='content']/div[{num}]/div[3]").click()
-            time.sleep(8)
+            time.sleep(7)
             xpath = "//*[@id='storage_market']/div[2]/div[1]/div[3]/span/span"
             element_price = driver.find_element_by_xpath(xpath)
             price = int(element_price.text.split(" ")[0].replace(".",""))
@@ -156,6 +165,7 @@ def train():
         print("train error")
 
 def work():
+
     getURL("https://rivalregions.com/#work")
     selector = "#content > div:nth-child(7) > div.work_w_5.work_square > div.tc.float_left.mini.work_exp_2 > div:nth-child(3) > div.work_factory_button.button_blue"
     try:
@@ -170,8 +180,8 @@ def work():
             print("work error2")
             getURL("https://rivalregions.com/#work")
             time.sleep(3)
-            driver.refresh()
-            time.sleep(3)
+            # driver.refresh()
+            # time.sleep(3)
             driver.find_element_by_xpath("//*[@id='sa_add2']/div[2]/a[2]/div").click()
             print("click capcha")
             driver.implicitly_wait(5)
@@ -191,19 +201,30 @@ def work():
         getURL("https://rivalregions.com/#work")
         driver.find_element_by_css_selector( selector).click()
 
+itemList = [3, 4, 5, 6, 8, 9, 14, 15, 16, 17, 18, 19] # oil, ore, etc.
 def controller():
     work()
-    # price logging
     priceLoging(itemList)
 
-itemList = [3, 4, 5, 6, 9] # 석유 광물 우라늄 다이아 라이벌륨
 driver.implicitly_wait(2)
 getURL("https://rivalregions.com/#overview")
+
+def educationUp():
+    try:
+        xpath = "//*[@id='index_perks_list']/div[5]/div[1]"
+        driver.implicitly_wait(6)
+        driver.find_element_by_xpath( xpath ).click()
+        xpath = "//*[@id='perk_target_4']/div[1]/div[1]/div"
+        driver.find_element_by_xpath( xpath ).click()
+    except:
+        print ("Unexpected error:", sys.exc_info()[0], "in educationUp")
 
 # control plane
 for i in range(24):
     goldRefillPresident()
     time.sleep(1)
     for j in range(6):
+        getURL("https://rivalregions.com/#overview")
+        educationUp()
         controller()
         time.sleep(562)
