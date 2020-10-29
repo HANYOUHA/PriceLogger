@@ -134,7 +134,7 @@ class Driver:
         time.sleep(3)
 
         for num in numList:
-            time.sleep(3)
+            time.sleep(3.5)
             s_xpath = f"//*[@id='content']/div[{num}]/div[3]"
             price = 0
             try:
