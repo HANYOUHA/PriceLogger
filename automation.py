@@ -163,6 +163,15 @@ class Driver:
             writer = csv.writer(f)
             writer.writerow( priceList )
 
+    def trainHourly(self):
+        driver = self.driver
+        self.getURL("https://rivalregions.com/#war")
+        try:
+            driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
+            driver.find_element_by_id("war_my_alpha").click()
+        except:
+            self.errorInfo( "trainHourly" )
+
     def train(self):
         # war train
         self.getURL("https://rivalregions.com/#war")
@@ -230,6 +239,7 @@ if __name__ == "__main__":
     d.getURL("https://rivalregions.com/#overview")
 
     for i in range(24):
+        d.trainHourly()
         for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
@@ -238,7 +248,7 @@ if __name__ == "__main__":
                 time.sleep(1)
                 j = j+1
                 d.controller()
-                time.sleep(60*8+28)
+                time.sleep(60*8+18)
             else:
                 d.controller()
-            time.sleep(60*8+36)
+                time.sleep(60*8+24)
