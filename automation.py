@@ -224,20 +224,21 @@ class Driver:
         except:
             self.errorInfo( "educationUp" )
 
-d = Driver()
-d.driver.implicitly_wait(2)
-d.getURL("https://rivalregions.com/#overview")
+if __name__ == "__main__":
+    d = Driver()
+    d.driver.implicitly_wait(2)
+    d.getURL("https://rivalregions.com/#overview")
 
-for i in range(24):
-    for j in range(6):
-        d.getURL("https://rivalregions.com/#overview")
-        d.educationUp()
-        if (j==0):
-            d.goldRefillPresident()
-            time.sleep(1)
-            j = j+1
-            d.controller()
-            time.sleep(60*8+28)
-        else:
-            d.controller()
+    for i in range(24):
+        for j in range(6):
+            d.getURL("https://rivalregions.com/#overview")
+            d.educationUp()
+            if (j==0):
+                d.goldRefillPresident()
+                time.sleep(1)
+                j = j+1
+                d.controller()
+                time.sleep(60*8+28)
+            else:
+                d.controller()
             time.sleep(60*8+36)
