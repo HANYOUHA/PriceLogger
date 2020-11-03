@@ -208,12 +208,12 @@ class Driver:
                 self.driver.implicitly_wait(5)
                 self.getURL("https://rivalregions.com/#work")
                 self.driver.find_element_by_css_selector( selector).click()
-        self.driver.implicitly_wait(1)
+        time.sleep(1.5)
         try:
             self.driver.find_element_by_id("header_my_fill_bar").click()
         except:
             print("Cannot refill energy")
-        time.sleep(0.5)
+        time.sleep(1)
         self.getURL("https://rivalregions.com/#work")
         time.sleep(3)
         try:
@@ -245,7 +245,7 @@ if __name__ == "__main__":
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
             if (j==0):
-                is_refill = d.goldRefillPresident()
+                is_refill = d.goldRefiller()
                 time.sleep(1)
                 j = j+1
                 d.controller()
