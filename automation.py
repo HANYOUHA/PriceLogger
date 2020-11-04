@@ -167,10 +167,19 @@ class Driver:
         driver = self.driver
         self.getURL("https://rivalregions.com/#war")
         try:
-            driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
+            driver.find_element_by_xpath("//div[@id='content']/div[3]/div[2]/div").click()
             driver.find_element_by_id("war_my_alpha").click()
         except:
             self.errorInfo( "trainHourly" )
+
+    def warHourly(self):
+        driver = self.driver
+        self.getURL("https://rivalregions.com/#war/details/354616")
+        try:
+            driver.find_element_by_xpath("//*[@id='war_w_def_s']/div").click()
+            driver.find_element_by_xpath("//*[@id='send_b_wrap']/div[1]").click()
+        except:
+            self.errorInfo( "warHourly" )
 
     def train(self):
         # war train
@@ -189,6 +198,7 @@ class Driver:
     def work(self):
         self.getURL("https://rivalregions.com/#work")
         selector = "#content > div:nth-child(7) > div.work_w_5.work_square > div.tc.float_left.mini.work_exp_2 > div:nth-child(3) > div.work_factory_button.button_blue"
+        self.driver.implicitly_wait(3)
         try:
             self.driver.find_element_by_css_selector( selector).click()
         except:
@@ -224,12 +234,14 @@ class Driver:
             self.driver.find_element_by_css_selector( selector).click()
 
 
+# "//*[@id='index_perks_list']/div[5]/div[1]"
     def educationUp(self):
         try:
-            xpath = "//*[@id='index_perks_list']/div[5]/div[1]"
+            xpath = "//*[@id='index_perks_list']/div[4]/div[2]"
             self.driver.implicitly_wait(6)
             self.driver.find_element_by_xpath( xpath ).click()
-            xpath = "//*[@id='perk_target_4']/div[1]/div[1]/div"
+            xpath = "//*[@id='perk_target_4']/div[2]/div[1]/div"
+            # xpath = "//*[@id='perk_target_4']/div[1]/div[1]/div"
             self.driver.find_element_by_xpath( xpath ).click()
         except:
             self.errorInfo( "educationUp" )
@@ -240,10 +252,13 @@ if __name__ == "__main__":
     d.getURL("https://rivalregions.com/#overview")
 
     for i in range(24):
-        d.trainHourly()
+        # d.trainHourly()
+        d.warHourly()
         for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
+            d.controller()
+            '''
             if (j==0):
                 is_refill = d.goldRefiller()
                 time.sleep(1)
@@ -254,4 +269,6 @@ if __name__ == "__main__":
                     continue
             else:
                 d.controller()
+
+            '''
             time.sleep(60*8+17)
