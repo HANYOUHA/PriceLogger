@@ -131,7 +131,7 @@ class Driver:
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         priceList = []
         priceList.append( str(now) )
-        time.sleep(3)
+        time.sleep(4)
 
         for num in numList:
             time.sleep(3.5)
@@ -172,14 +172,22 @@ class Driver:
         except:
             self.errorInfo( "trainHourly" )
 
-    def warHourly(self):
+    def war(self):
         driver = self.driver
-        self.getURL("https://rivalregions.com/#war/details/354616")
+        self.getURL("https://rivalregions.com/#war/details/354644")
         try:
-            driver.find_element_by_xpath("//*[@id='war_w_def_s']/div").click()
+            driver.find_element_by_xpath("//*[@id='war_w_ata_s']/div[2]").click()
             driver.find_element_by_xpath("//*[@id='send_b_wrap']/div[1]").click()
         except:
-            self.errorInfo( "warHourly" )
+            self.errorInfo( "war" )
+        self.getURL("https://rivalregions.com/#war/details/354644")
+        try:
+            self.driver.find_element_by_id("header_my_fill_bar").click()
+            time.sleep(0.5)
+            driver.find_element_by_xpath("//*[@id='war_w_ata_s']/div[2]").click()
+            driver.find_element_by_xpath("//*[@id='send_b_wrap']/div[1]").click()
+        except:
+            self.errorInfo( "war" )
 
     def train(self):
         # war train
@@ -253,7 +261,7 @@ if __name__ == "__main__":
 
     for i in range(24):
         # d.trainHourly()
-        d.warHourly()
+        d.war()
         for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
