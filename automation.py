@@ -167,7 +167,7 @@ class Driver:
         driver = self.driver
         self.getURL("https://rivalregions.com/#war")
         try:
-            driver.find_element_by_xpath("//div[@id='content']/div[3]/div[2]/div").click()
+            driver.find_element_by_xpath("//div[@id='content']/div[4]/div[2]/div").click()
             driver.find_element_by_id("war_my_alpha").click()
         except:
             self.errorInfo( "trainHourly" )
@@ -248,8 +248,8 @@ class Driver:
             xpath = "//*[@id='index_perks_list']/div[4]/div[2]"
             self.driver.implicitly_wait(6)
             self.driver.find_element_by_xpath( xpath ).click()
-            xpath = "//*[@id='perk_target_4']/div[2]/div[1]/div"
-            # xpath = "//*[@id='perk_target_4']/div[1]/div[1]/div"
+            # xpath = "//*[@id='perk_target_4']/div[2]/div[1]/div"
+            xpath = "//*[@id='perk_target_4']/div[1]/div[1]/div"
             self.driver.find_element_by_xpath( xpath ).click()
         except:
             self.errorInfo( "educationUp" )
@@ -257,15 +257,15 @@ class Driver:
 if __name__ == "__main__":
     d = Driver()
     d.driver.implicitly_wait(2)
-    d.getURL("https://rivalregions.com/#overview")
+    # d.getURL("https://rivalregions.com/#overview")
 
     for i in range(24):
-        # d.trainHourly()
-        d.war()
+        d.trainHourly()
         for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
             d.controller()
+
             '''
             if (j==0):
                 is_refill = d.goldRefiller()
@@ -277,6 +277,6 @@ if __name__ == "__main__":
                     continue
             else:
                 d.controller()
-
             '''
+
             time.sleep(60*8+17)
