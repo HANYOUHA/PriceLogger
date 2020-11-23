@@ -226,6 +226,12 @@ class Driver:
                 self.driver.implicitly_wait(5)
                 self.getURL("https://rivalregions.com/#work")
                 self.driver.find_element_by_css_selector( selector).click()
+                try:
+                    self.driver.find_element_by_xpath("//*[@id='sa_add2']/div[2]/a[2]/div").click()
+                    print("click capcha2")
+                    self.driver.implicitly_wait(5)
+                except:
+                    pass
         time.sleep(1.5)
         try:
             self.driver.find_element_by_id("header_my_fill_bar").click()
@@ -279,4 +285,4 @@ if __name__ == "__main__":
                 d.controller()
             '''
 
-            time.sleep(60*8+17)
+            time.sleep(60*8+21)
