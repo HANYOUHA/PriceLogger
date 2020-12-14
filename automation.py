@@ -46,22 +46,22 @@ class Driver:
     def refillGold(self):
         self.getURL("https://rivalregions.com/#parliament/offer")
         print ("explore state gold")
-        time.sleep(7)
-        try:
-            self.driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
-        except:
-            self.getURL("https://rivalregions.com/#parliament/offer")
-            time.sleep(7)
-            self.driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
-
-        self.driver.implicitly_wait(4)
+        time.sleep(2)
+        self.driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
+        # time.sleep(1)
+        self.driver.implicitly_wait(1)
         self.driver.find_element_by_link_text("Resources exploration: state").click()
         self.driver.implicitly_wait(1)
         self.driver.find_element_by_id("offer_do").click()
+        # print("bill selected")
+        self.driver.implicitly_wait(2)
+        self.driver.find_element_by_xpath("//*[@id='parliament_active_laws']/div/div/div/div[1]").click()
+        self.driver.implicitly_wait(2)
         # time.sleep(1)
+        self.driver.find_element_by_xpath("//*[@id='offer_show_v']/div[5]/div").click()
 
     def goldRefiller(self): # 금 채우기 검사 및 실행
-        self.getURL("https://rivalregions.com/#listed/stateresources/3330")
+        self.getURL("https://rivalregions.com/#listed/stateresources/3657")
         time.sleep(1)
         tempList = []
         gold_reserve = self.driver.find_elements_by_class_name("list_level")
@@ -270,9 +270,9 @@ if __name__ == "__main__":
         for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
-            d.controller()
 
-            '''
+            d.controller()
+            """
             if (j==0):
                 is_refill = d.goldRefiller()
                 time.sleep(1)
@@ -283,6 +283,6 @@ if __name__ == "__main__":
                     continue
             else:
                 d.controller()
-            '''
+            """
 
             time.sleep(60*8+21)
