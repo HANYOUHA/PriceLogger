@@ -46,16 +46,18 @@ class Driver:
     def refillGold(self):
         self.getURL("https://rivalregions.com/#parliament/offer")
         print ("explore state gold")
-        time.sleep(2)
+        # time.sleep(2)
+        self.driver.implicitly_wait(3)
         self.driver.find_element_by_xpath("//div[@id='offer_dd']/div/div/div").click()
-        # time.sleep(1)
         self.driver.implicitly_wait(1)
         self.driver.find_element_by_link_text("Resources exploration: state").click()
         self.driver.implicitly_wait(1)
         self.driver.find_element_by_id("offer_do").click()
-        # print("bill selected")
-        self.driver.implicitly_wait(2)
-        self.driver.find_element_by_xpath("//*[@id='parliament_active_laws']/div/div/div/div[1]").click()
+        print("bill selected")
+        self.driver.implicitly_wait(3)
+        self.driver.find_element_by_xpath("//*[contains(text(), 'Resources exploration: state, gold resources')]").click()
+        # self.driver.find_element_by_xpath("//*[@id='parliament_active_laws']/div/div/div/div[1]").click()
+
         self.driver.implicitly_wait(2)
         # time.sleep(1)
         self.driver.find_element_by_xpath("//*[@id='offer_show_v']/div[5]/div").click()
@@ -232,14 +234,15 @@ class Driver:
                     self.driver.implicitly_wait(5)
                 except:
                     pass
-        time.sleep(1.5)
+        time.sleep(2)
         try:
             self.driver.find_element_by_id("header_my_fill_bar").click()
         except:
             print("Cannot refill energy")
         time.sleep(1)
         self.getURL("https://rivalregions.com/#work")
-        time.sleep(3)
+        self.driver.implicitly_wait(3)
+        time.sleep(2)
         try:
             self.driver.find_element_by_css_selector( selector).click()
         except:
@@ -267,12 +270,11 @@ if __name__ == "__main__":
 
     for i in range(24):
         d.trainHourly()
-        for j in range(6):
+        for j in range(3):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
 
-            d.controller()
-            """
+            # d.controller()
             if (j==0):
                 is_refill = d.goldRefiller()
                 time.sleep(1)
@@ -283,6 +285,6 @@ if __name__ == "__main__":
                     continue
             else:
                 d.controller()
-            """
 
-            time.sleep(60*8+21)
+            time.sleep(60*8+23)
+            # time.sleep(60*18+21)
