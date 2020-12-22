@@ -130,10 +130,11 @@ class Driver:
 
     def priceLoging (self, numList):
         self.getURL("https://rivalregions.com/#storage")
+        self.driver.refresh()
         now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         priceList = []
         priceList.append( str(now) )
-        time.sleep(4)
+        time.sleep(5)
 
         for num in numList:
             time.sleep(3.5)
@@ -234,14 +235,18 @@ class Driver:
                     self.driver.implicitly_wait(5)
                 except:
                     pass
-        time.sleep(2)
+        time.sleep(3)
         try:
             self.driver.find_element_by_id("header_my_fill_bar").click()
         except:
             print("Cannot refill energy")
-        time.sleep(1)
+            time.sleep(1)
+            try:
+                self.driver.find_element_by_id("header_my_fill_bar").click()
+            except:
+                print("Cannot refill energy2")
         self.getURL("https://rivalregions.com/#work")
-        self.driver.implicitly_wait(3)
+        # self.driver.implicitly_wait(3)
         time.sleep(2)
         try:
             self.driver.find_element_by_css_selector( selector).click()
@@ -254,7 +259,8 @@ class Driver:
 # "//*[@id='index_perks_list']/div[5]/div[1]"
     def educationUp(self):
         try:
-            xpath = "//*[@id='index_perks_list']/div[4]/div[2]"
+            xpath = "//*[@id='index_perks_list']/div[5]/div[1]"
+            # "//*[@id='index_perks_list']/div[4]/div[2]"
             self.driver.implicitly_wait(6)
             self.driver.find_element_by_xpath( xpath ).click()
             # xpath = "//*[@id='perk_target_4']/div[2]/div[1]/div"
@@ -265,12 +271,12 @@ class Driver:
 
 if __name__ == "__main__":
     d = Driver()
-    d.driver.implicitly_wait(2)
+    d.driver.implicitly_wait(3)
     # d.getURL("https://rivalregions.com/#overview")
 
     for i in range(24):
         d.trainHourly()
-        for j in range(3):
+        for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
 
