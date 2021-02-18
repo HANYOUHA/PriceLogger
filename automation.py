@@ -21,7 +21,7 @@ class Driver:
     def __init__(self):
         chrome_options = Options()
         chrome_options.add_experimental_option("debuggerAddress", "localhost:9222")
-        chrome_driver = "/home/kimjadong2020/Documents/chromedriver"
+        chrome_driver = "/home/snowmin0215/Documents/chromedriver"
         self.driver = webdriver.Chrome(chrome_driver, options=chrome_options)
         self.itemList = [3, 4, 5, 6, 8, 9, 14, 15, 16, 17, 19] # oil, ore, etc.
 
@@ -236,6 +236,7 @@ class Driver:
                 except:
                     pass
         time.sleep(3)
+        # refill energy
         try:
             self.driver.find_element_by_id("header_my_fill_bar").click()
         except:
@@ -259,13 +260,15 @@ class Driver:
 # "//*[@id='index_perks_list']/div[5]/div[1]"
     def educationUp(self):
         try:
-            xpath = "//*[@id='index_perks_list']/div[5]/div[1]"
+            xpath = "//*[@id='index_perks_list']/div[6]/div[1]"
+        # xpath = "//*[@id='index_perks_list']/div[5]/div[1]"
             # "//*[@id='index_perks_list']/div[4]/div[2]"
-            self.driver.implicitly_wait(6)
+            self.driver.implicitly_wait(3)
             self.driver.find_element_by_xpath( xpath ).click()
             # xpath = "//*[@id='perk_target_4']/div[2]/div[1]/div"
-            xpath = "//*[@id='perk_target_4']/div[1]/div[1]/div"
-            self.driver.find_element_by_xpath( xpath ).click()
+            self.driver.find_element_by_xpath(
+                    "//*[@id='perk_target_4']/div[1]/div[1]/div"
+                    ).click()
         except:
             self.errorInfo( "educationUp" )
 
@@ -279,10 +282,10 @@ if __name__ == "__main__":
         for j in range(6):
             d.getURL("https://rivalregions.com/#overview")
             d.educationUp()
-
-            # d.controller()
+        d.controller()
+        '''
             if (j==0):
-                is_refill = d.goldRefiller()
+		# is_refill = d.goldRefiller()
                 time.sleep(1)
                 j = j+1
                 d.controller()
@@ -291,6 +294,6 @@ if __name__ == "__main__":
                     continue
             else:
                 d.controller()
+	    '''
 
-            time.sleep(60*8+23)
-            # time.sleep(60*18+21)
+        time.sleep(60*8+23)
