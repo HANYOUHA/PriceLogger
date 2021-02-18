@@ -260,11 +260,12 @@ class Driver:
 # "//*[@id='index_perks_list']/div[5]/div[1]"
     def educationUp(self):
         try:
-            xpath = "//*[@id='index_perks_list']/div[6]/div[1]"
+            # xpath = "//*[@id='index_perks_list']/div[6]/div[1]"
         # xpath = "//*[@id='index_perks_list']/div[5]/div[1]"
             # "//*[@id='index_perks_list']/div[4]/div[2]"
             self.driver.implicitly_wait(3)
-            self.driver.find_element_by_xpath( xpath ).click()
+            self.driver.find_element_by_xpath(
+                    "//*[@id='index_perks_list']/div[5]/div[1]").click()
             # xpath = "//*[@id='perk_target_4']/div[2]/div[1]/div"
             self.driver.find_element_by_xpath(
                     "//*[@id='perk_target_4']/div[1]/div[1]/div"
